@@ -38,6 +38,7 @@ public class AuditDbContext : DbContext
             {
                 actor.ToJson();
                 actor.Property(p => p.Roles).HasConversion(listConverter);
+                actor.OwnsOne(p => p.Impersonation);
             });
 
             entity.OwnsOne(e => e.Target, target =>
