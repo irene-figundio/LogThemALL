@@ -84,3 +84,13 @@ await auditService.DeleteAsync(guid);
 La libreria utilizza Entity Framework Core per gestire lo schema. I campi complessi come `Actor`, `Http`, `Target`, `Changes` e `Error` sono mappati come colonne JSON per massima flessibilità.
 
 Il database viene creato automaticamente alla prima operazione di logging se non esiste.
+
+## Progetto di Test (Windows Forms)
+
+La soluzione include un progetto `LogThemALL.TestApp`, un'applicazione Windows Forms "Production Ready" per il testing esaustivo della libreria.
+
+L'interfaccia permette di:
+- Configurare la stringa di connessione e il nome del servizio.
+- Eseguire tutte le operazioni CRUD (Create, Read, Update, Delete) sui log.
+- Testare la funzionalità di ricerca con criteri personalizzabili.
+- Visualizzare i risultati in tempo reale in una griglia.
