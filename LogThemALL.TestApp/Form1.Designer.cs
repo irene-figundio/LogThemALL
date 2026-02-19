@@ -23,6 +23,7 @@ namespace LogThemALL.TestApp
             this.txtConnectionString = new System.Windows.Forms.TextBox();
             this.lblConnString = new System.Windows.Forms.Label();
             this.tabCRUD = new System.Windows.Forms.TabPage();
+            this.btnSimulateApiLog = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
@@ -37,6 +38,14 @@ namespace LogThemALL.TestApp
             this.txtEventName = new System.Windows.Forms.TextBox();
             this.lblEventName = new System.Windows.Forms.Label();
             this.tabSearch = new System.Windows.Forms.TabPage();
+            this.txtSearchStatusCode = new System.Windows.Forms.TextBox();
+            this.lblSearchStatusCode = new System.Windows.Forms.Label();
+            this.txtSearchTenantId = new System.Windows.Forms.TextBox();
+            this.lblSearchTenantId = new System.Windows.Forms.Label();
+            this.dtpTo = new System.Windows.Forms.DateTimePicker();
+            this.lblTo = new System.Windows.Forms.Label();
+            this.dtpFrom = new System.Windows.Forms.DateTimePicker();
+            this.lblFrom = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.lblSearchEventType = new System.Windows.Forms.Label();
             this.cmbSearchEventType = new System.Windows.Forms.ComboBox();
@@ -59,7 +68,7 @@ namespace LogThemALL.TestApp
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 200);
+            this.tabControl1.Size = new System.Drawing.Size(800, 220);
             this.tabControl1.TabIndex = 0;
             //
             // tabConfig
@@ -72,7 +81,7 @@ namespace LogThemALL.TestApp
             this.tabConfig.Location = new System.Drawing.Point(4, 24);
             this.tabConfig.Name = "tabConfig";
             this.tabConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConfig.Size = new System.Drawing.Size(792, 172);
+            this.tabConfig.Size = new System.Drawing.Size(792, 192);
             this.tabConfig.TabIndex = 0;
             this.tabConfig.Text = "Configurazione";
             this.tabConfig.UseVisualStyleBackColor = true;
@@ -123,6 +132,7 @@ namespace LogThemALL.TestApp
             //
             // tabCRUD
             //
+            this.tabCRUD.Controls.Add(this.btnSimulateApiLog);
             this.tabCRUD.Controls.Add(this.btnDelete);
             this.tabCRUD.Controls.Add(this.btnUpdate);
             this.tabCRUD.Controls.Add(this.btnCreate);
@@ -139,10 +149,21 @@ namespace LogThemALL.TestApp
             this.tabCRUD.Location = new System.Drawing.Point(4, 24);
             this.tabCRUD.Name = "tabCRUD";
             this.tabCRUD.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCRUD.Size = new System.Drawing.Size(792, 172);
+            this.tabCRUD.Size = new System.Drawing.Size(792, 192);
             this.tabCRUD.TabIndex = 1;
             this.tabCRUD.Text = "Gestione Log (CRUD)";
             this.tabCRUD.UseVisualStyleBackColor = true;
+            //
+            // btnSimulateApiLog
+            //
+            this.btnSimulateApiLog.BackColor = System.Drawing.Color.LightBlue;
+            this.btnSimulateApiLog.Location = new System.Drawing.Point(330, 130);
+            this.btnSimulateApiLog.Name = "btnSimulateApiLog";
+            this.btnSimulateApiLog.Size = new System.Drawing.Size(150, 23);
+            this.btnSimulateApiLog.TabIndex = 13;
+            this.btnSimulateApiLog.Text = "Simula Log WebAPI";
+            this.btnSimulateApiLog.UseVisualStyleBackColor = false;
+            this.btnSimulateApiLog.Click += new System.EventHandler(this.btnSimulateApiLog_Click);
             //
             // btnDelete
             //
@@ -263,6 +284,14 @@ namespace LogThemALL.TestApp
             //
             // tabSearch
             //
+            this.tabSearch.Controls.Add(this.txtSearchStatusCode);
+            this.tabSearch.Controls.Add(this.lblSearchStatusCode);
+            this.tabSearch.Controls.Add(this.txtSearchTenantId);
+            this.tabSearch.Controls.Add(this.lblSearchTenantId);
+            this.tabSearch.Controls.Add(this.dtpTo);
+            this.tabSearch.Controls.Add(this.lblTo);
+            this.tabSearch.Controls.Add(this.dtpFrom);
+            this.tabSearch.Controls.Add(this.lblFrom);
             this.tabSearch.Controls.Add(this.btnSearch);
             this.tabSearch.Controls.Add(this.lblSearchEventType);
             this.tabSearch.Controls.Add(this.cmbSearchEventType);
@@ -271,19 +300,86 @@ namespace LogThemALL.TestApp
             this.tabSearch.Location = new System.Drawing.Point(4, 24);
             this.tabSearch.Name = "tabSearch";
             this.tabSearch.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSearch.Size = new System.Drawing.Size(792, 172);
+            this.tabSearch.Size = new System.Drawing.Size(792, 192);
             this.tabSearch.TabIndex = 2;
-            this.tabSearch.Text = "Ricerca Audit";
+            this.tabSearch.Text = "Ricerca Audit Dettagliata";
             this.tabSearch.UseVisualStyleBackColor = true;
+            //
+            // txtSearchStatusCode
+            //
+            this.txtSearchStatusCode.Location = new System.Drawing.Point(230, 125);
+            this.txtSearchStatusCode.Name = "txtSearchStatusCode";
+            this.txtSearchStatusCode.Size = new System.Drawing.Size(100, 23);
+            this.txtSearchStatusCode.TabIndex = 12;
+            //
+            // lblSearchStatusCode
+            //
+            this.lblSearchStatusCode.AutoSize = true;
+            this.lblSearchStatusCode.Location = new System.Drawing.Point(230, 107);
+            this.lblSearchStatusCode.Name = "lblSearchStatusCode";
+            this.lblSearchStatusCode.Size = new System.Drawing.Size(68, 15);
+            this.lblSearchStatusCode.TabIndex = 11;
+            this.lblSearchStatusCode.Text = "Codice Http";
+            //
+            // txtSearchTenantId
+            //
+            this.txtSearchTenantId.Location = new System.Drawing.Point(230, 75);
+            this.txtSearchTenantId.Name = "txtSearchTenantId";
+            this.txtSearchTenantId.Size = new System.Drawing.Size(200, 23);
+            this.txtSearchTenantId.TabIndex = 10;
+            //
+            // lblSearchTenantId
+            //
+            this.lblSearchTenantId.AutoSize = true;
+            this.lblSearchTenantId.Location = new System.Drawing.Point(230, 57);
+            this.lblSearchTenantId.Name = "lblSearchTenantId";
+            this.lblSearchTenantId.Size = new System.Drawing.Size(56, 15);
+            this.lblSearchTenantId.TabIndex = 9;
+            this.lblSearchTenantId.Text = "Tenant ID";
+            //
+            // dtpTo
+            //
+            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpTo.Location = new System.Drawing.Point(450, 27);
+            this.dtpTo.Name = "dtpTo";
+            this.dtpTo.Size = new System.Drawing.Size(120, 23);
+            this.dtpTo.TabIndex = 8;
+            //
+            // lblTo
+            //
+            this.lblTo.AutoSize = true;
+            this.lblTo.Location = new System.Drawing.Point(450, 9);
+            this.lblTo.Name = "lblTo";
+            this.lblTo.Size = new System.Drawing.Size(15, 15);
+            this.lblTo.TabIndex = 7;
+            this.lblTo.Text = "A";
+            //
+            // dtpFrom
+            //
+            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFrom.Location = new System.Drawing.Point(310, 27);
+            this.dtpFrom.Name = "dtpFrom";
+            this.dtpFrom.Size = new System.Drawing.Size(120, 23);
+            this.dtpFrom.TabIndex = 6;
+            //
+            // lblFrom
+            //
+            this.lblFrom.AutoSize = true;
+            this.lblFrom.Location = new System.Drawing.Point(310, 9);
+            this.lblFrom.Name = "lblFrom";
+            this.lblFrom.Size = new System.Drawing.Size(21, 15);
+            this.lblFrom.TabIndex = 5;
+            this.lblFrom.Text = "Da";
             //
             // btnSearch
             //
-            this.btnSearch.Location = new System.Drawing.Point(10, 110);
+            this.btnSearch.BackColor = System.Drawing.Color.LightGreen;
+            this.btnSearch.Location = new System.Drawing.Point(10, 155);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(150, 23);
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Esegui Ricerca";
-            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             //
             // lblSearchEventType
@@ -326,10 +422,10 @@ namespace LogThemALL.TestApp
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 206);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 226);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(800, 244);
+            this.dataGridView1.Size = new System.Drawing.Size(800, 224);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             //
@@ -382,5 +478,14 @@ namespace LogThemALL.TestApp
         private System.Windows.Forms.Label lblSearchEventType;
         private System.Windows.Forms.ComboBox cmbSearchEventType;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Label lblFrom;
+        private System.Windows.Forms.DateTimePicker dtpFrom;
+        private System.Windows.Forms.Label lblTo;
+        private System.Windows.Forms.DateTimePicker dtpTo;
+        private System.Windows.Forms.Label lblSearchTenantId;
+        private System.Windows.Forms.TextBox txtSearchTenantId;
+        private System.Windows.Forms.Label lblSearchStatusCode;
+        private System.Windows.Forms.TextBox txtSearchStatusCode;
+        private System.Windows.Forms.Button btnSimulateApiLog;
     }
 }

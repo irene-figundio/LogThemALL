@@ -13,6 +13,8 @@ namespace LogThemALL.TestApp
         {
             InitializeComponent();
             PopulateEnums();
+            dtpFrom.Value = DateTime.Now.AddDays(-7);
+            dtpTo.Value = DateTime.Now;
         }
 
         private void PopulateEnums()
@@ -72,6 +74,57 @@ namespace LogThemALL.TestApp
             }
         }
 
+        private async void btnSimulateApiLog_Click(object sender, EventArgs e)
+        {
+            if (_auditService == null) { MessageBox.Show("Inizializzare il servizio prima!"); return; }
+
+            try
+            {
+                var log = new AuditLog
+                {
+                    EventName = "Orders.Create",
+                    Message = "Simulated API Order Creation",
+                    EventType = AuditEventType.Create,
+                    Severity = AuditSeverity.Info,
+                    Outcome = AuditOutcome.Success,
+                    TimestampUtc = DateTimeOffset.UtcNow,
+                    Environment = "Production",
+                    ServiceName = txtServiceName.Text,
+                    CorrelationId = Guid.NewGuid().ToString(),
+                    RequestId = Guid.NewGuid().ToString(),
+                    TenantId = "TENANT_ABC_123",
+                    Actor = new AuditActor
+                    {
+                        UserId = "user-api-sim",
+                        Username = "api_user",
+                        IpAddress = "192.168.1.100",
+                        UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Simulation"
+                    },
+                    Http = new AuditHttpContext
+                    {
+                        Method = "POST",
+                        Path = "/api/v1/orders",
+                        StatusCode = 201,
+                        Protocol = "HTTP/1.1",
+                        RequestBodySize = 1024
+                    },
+                    Target = new AuditTarget
+                    {
+                        ResourceType = "Order",
+                        Action = "Create"
+                    }
+                };
+
+                await _auditService.LogAsync(log);
+                MessageBox.Show("Log API simulato con successo!", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RefreshGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore simulazione API: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
             if (_auditService == null || _selectedLog == null) { MessageBox.Show("Selezionare un log dalla griglia e inizializzare il servizio!"); return; }
@@ -127,6 +180,15 @@ namespace LogThemALL.TestApp
 
                 if (cmbSearchEventType.SelectedIndex > 0)
                     criteria.EventType = (AuditEventType)(cmbSearchEventType.SelectedItem ?? AuditEventType.Unknown);
+
+                if (!string.IsNullOrWhiteSpace(txtSearchTenantId.Text))
+                    criteria.TenantId = txtSearchTenantId.Text;
+
+                if (int.TryParse(txtSearchStatusCode.Text, out int statusCode))
+                    criteria.HttpStatusCode = statusCode;
+
+                criteria.FromUtc = new DateTimeOffset(dtpFrom.Value.Date);
+                criteria.ToUtc = new DateTimeOffset(dtpTo.Value.Date.AddDays(1).AddTicks(-1));
 
                 var results = await _auditService.SearchAsync(criteria);
                 dataGridView1.DataSource = results;

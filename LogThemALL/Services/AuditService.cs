@@ -119,6 +119,12 @@ public class AuditService : IAuditService
         if (!string.IsNullOrEmpty(criteria.UserId))
             query = query.Where(l => l.Actor.UserId == criteria.UserId);
 
+        if (!string.IsNullOrEmpty(criteria.TenantId))
+            query = query.Where(l => l.TenantId == criteria.TenantId);
+
+        if (criteria.HttpStatusCode.HasValue)
+            query = query.Where(l => l.Http != null && l.Http.StatusCode == criteria.HttpStatusCode.Value);
+
         return await query.OrderByDescending(l => l.TimestampUtc).ToListAsync();
     }
 

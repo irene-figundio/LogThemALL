@@ -13,4 +13,6 @@ public class LogSearchCriteria
     public string? CorrelationId { get; set; }
     public string? UserId { get; set; }
     public string? EventName { get; set; }
+    public string? TenantId { get; set; }
+    public int? HttpStatusCode { get; set; }
 }
