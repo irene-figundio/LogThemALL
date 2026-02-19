@@ -10,6 +10,7 @@ public interface IAuditService
     Task LogAsync(AuditLog log);
     Task<AuditLog?> GetByIdAsync(Guid id);
     Task<List<AuditLog>> GetAllAsync();
+    Task<List<AuditLog>> SearchAsync(LogSearchCriteria criteria);
     Task UpdateAsync(AuditLog log);
     Task DeleteAsync(Guid id);
     Task EnsureDatabaseCreatedAsync();
@@ -84,6 +85,41 @@ public class AuditService : IAuditService
     {
         using var context = CreateContext();
         return await context.AuditLogs.ToListAsync();
+    }
+
+    public async Task<List<AuditLog>> SearchAsync(LogSearchCriteria criteria)
+    {
+        using var context = CreateContext();
+        var query = context.AuditLogs.AsQueryable();
+
+        if (criteria.FromUtc.HasValue)
+            query = query.Where(l => l.TimestampUtc >= criteria.FromUtc.Value);
+
+        if (criteria.ToUtc.HasValue)
+            query = query.Where(l => l.TimestampUtc <= criteria.ToUtc.Value);
+
+        if (criteria.EventType.HasValue)
+            query = query.Where(l => l.EventType == criteria.EventType.Value);
+
+        if (criteria.Severity.HasValue)
+            query = query.Where(l => l.Severity == criteria.Severity.Value);
+
+        if (criteria.Outcome.HasValue)
+            query = query.Where(l => l.Outcome == criteria.Outcome.Value);
+
+        if (!string.IsNullOrEmpty(criteria.ServiceName))
+            query = query.Where(l => l.ServiceName == criteria.ServiceName);
+
+        if (!string.IsNullOrEmpty(criteria.CorrelationId))
+            query = query.Where(l => l.CorrelationId == criteria.CorrelationId);
+
+        if (!string.IsNullOrEmpty(criteria.EventName))
+            query = query.Where(l => l.EventName == criteria.EventName);
+
+        if (!string.IsNullOrEmpty(criteria.UserId))
+            query = query.Where(l => l.Actor.UserId == criteria.UserId);
+
+        return await query.OrderByDescending(l => l.TimestampUtc).ToListAsync();
     }
 
     public async Task UpdateAsync(AuditLog log)

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="LogThemALL.TestApp/LogThemALL.TestApp.csproj" />
   <Project Path="LogThemALL/LogThemALL.csproj" />
 </Solution>
